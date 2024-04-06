@@ -1,0 +1,27 @@
+apiVersion: flagger.app/v1beta1
+kind: Canary
+metadata:
+  name: web-application
+  namespace: default
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: web-application
+  service:
+    port: 80
+    gateways:
+    - web-application-gateway
+    hosts:
+    - web-application.local
+  analysis:
+    interval: 1m
+    threshold: 5
+    iterations: 5
+    metrics:
+    - name: request-success-rate
+      thresholdRange:
+        min: 99
+    - name: request-duration
+      thresholdRange:
+        max: 500
