@@ -1,23 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ "{{ include \"webserver.fullname\" . }}" }}
-  labels:
-    {{ "{{- include \"webserver.labels\" . | nindent 4 }}" }}
+  name: webserver
 spec:
-  replicas: {{ "{{ .Values.replicaCount }}" }}
+  replicas: 1
   selector:
     matchLabels:
-      {{ "{{- include \"webserver.selectorLabels\" . | nindent 6 }}" }}
+      app: webserver
   template:
     metadata:
       labels:
-        {{ "{{- include \"webserver.selectorLabels\" . | nindent 8 }}" }}
+        app: webserver
     spec:
       containers:
-        - name: webserver
-          image: "{{ "{{ .Values.image.repository }}:{{ .Values.image.tag }}" }}"
-          imagePullPolicy: {{ "{{ .Values.image.pullPolicy }}" }}
-          ports:
-            - name: http
-              containerPort: {{ "{{ .Values.service.port }}" }}
+      - name: webserver
+        image: "webserver-image:latest"
+        ports:
+        - containerPort: 80
