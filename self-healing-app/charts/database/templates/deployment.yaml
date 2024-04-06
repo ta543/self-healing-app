@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ "{{ include \"database.fullname\" . }}" }}
+  labels:
+    {{ "{{- include \"database.labels\" . | nindent 4 }}" }}
+spec:
+  replicas: {{ "{{ .Values.replicaCount }}" }}
+  selector:
+    matchLabels:
+      {{ "{{- include \"database.selectorLabels\" . | nindent 6 }}" }}
+  template:
+    metadata:
+      labels:
+        {{ "{{- include \"database.selectorLabels\" . | nindent 8 }}" }}
+    spec:
+      containers:
+        - name: database
+          image: "{{ "{{ .Values.image.repository }}:{{ .Values.image.tag }}" }}"
+          imagePullPolicy: {{ "{{ .Values.image.pullPolicy }}" }}
+          ports:
+            - name: postgres
+              containerPort: {{ "{{ .Values.service.port }}" }}
+          volumeMounts:
+            - name: database-storage
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: database-storage
+          persistentVolumeClaim:
+            claimName: {{ "{{ include \"database.fullname\" . }}" }}-pvc

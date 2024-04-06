@@ -1,0 +1,15 @@
+# Default values for database.
+replicaCount: 1
+
+image:
+  repository: postgres
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+service:
+  type: ClusterIP
+  port: 5432
+
+persistence:
+  enabled: true
+  size: 10Gi
