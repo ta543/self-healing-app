@@ -21,7 +21,7 @@ jobs:
         version: '3.5.4'
       
     - name: Lint Helm charts
-      run: helm lint ./charts/*
+      run: helm lint self-healing-app/charts/*
           
     - name: Install Kubernetes tools (kubectl)
       run: |
